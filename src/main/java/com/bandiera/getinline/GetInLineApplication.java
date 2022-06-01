@@ -1,4 +1,4 @@
-package com.uno.getinline;
+package com.bandiera.getinline;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

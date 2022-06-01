@@ -1,11 +1,11 @@
 package com.bandiera.getinline.controller;
 
 import com.bandiera.getinline.constant.PlaceType;
+import com.bandiera.getinline.domain.Place;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -30,8 +30,19 @@ public class AdminController {
     }
 
     @GetMapping("/places/{placeId}")
-    public String adminPlaceDetail(@PathVariable Integer placeId) {
-        return "admin/place-detail";
+    public ModelAndView adminPlaceDetail(@PathVariable Long placeId) {
+        Map<String, Object> map = new HashMap<>();
+        Place place = new Place();
+        place.setId(1l);
+        place.setPlaceType(PlaceType.COMMON);
+        place.setPlaceName("대구은행역");
+        place.setAddress("대구광역시 수성구 수성동4가");
+        place.setCapacity(10);
+        place.setMemo("대구은행역 대구2호선");
+        place.setPhoneNumber("000-000-0000");
+        map.put("place", place);
+
+        return new ModelAndView("admin/place-detail", map);
     }
 
     @GetMapping("/events")

@@ -10,7 +10,7 @@ public class APIEventController {
 
     @GetMapping("/events")
     public List<String> getEvents() {
-        return List.of("event1", "event2");
+         return List.of("event1", "event2");
     }
 
     @PostMapping("/events")

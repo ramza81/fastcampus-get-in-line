@@ -18,7 +18,7 @@ public class APIPlaceController {
         return true;
     }
 
-    @GetMapping("/places/{placeId")
+    @GetMapping("/places/{placeId}")
     public String getPlace(@PathVariable Integer placeId) {
         return "place " + placeId;
     }

@@ -6,15 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class BaseController implements ErrorController {
+public class BaseController { //implements ErrorController {
 
     @GetMapping("/")
-    public String root() {
-        return "index";
+    public String root() throws Exception {
+        throw new Exception("test");
+//        return "index";
     }
 
-    @RequestMapping("/error")
-    public String error() {
-        return "error";
-    }
+//    @RequestMapping("/error")
+//    public String error() {
+//        return "error";
+//    }
 }

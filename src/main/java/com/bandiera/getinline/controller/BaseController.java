@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class BaseController {
 
     @GetMapping("/")
-    public String root() throws Exception {
-        throw new Exception("test");
-//        return "index";
+    public String root() {
+        return "index";
     }
 
 }

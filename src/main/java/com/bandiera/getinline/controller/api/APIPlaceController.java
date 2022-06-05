@@ -1,5 +1,8 @@
 package com.bandiera.getinline.controller.api;
 
+import com.bandiera.getinline.constant.PlaceType;
+import com.bandiera.getinline.dto.APIDataResponse;
+import com.bandiera.getinline.dto.PlaceDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,8 +12,15 @@ import java.util.List;
 public class APIPlaceController {
 
     @GetMapping("/places")
-    public List<String> getPlaces() {
-        return List.of("place1", "place2");
+    public APIDataResponse<List<PlaceDTO>> getPlaces() {
+        return APIDataResponse.of(List.of(PlaceDTO.of(
+                PlaceType.COMMON,
+                "대구은행본점",
+                "대구 수성구 수성동4가",
+                "053-752-0001",
+                10,
+                "은행"
+        )));
     }
 
     @PostMapping("/places")
@@ -19,8 +29,19 @@ public class APIPlaceController {
     }
 
     @GetMapping("/places/{placeId}")
-    public String getPlace(@PathVariable Integer placeId) {
-        return "place " + placeId;
+    public APIDataResponse<PlaceDTO> getPlace(@PathVariable Integer placeId) {
+        if (placeId.equals(2)) {
+            return APIDataResponse.of(null);
+        }
+
+        return APIDataResponse.of(PlaceDTO.of(
+                PlaceType.COMMON,
+                "대구은행본점",
+                "대구 수성구 수성동4가",
+                "053-752-0001",
+                10,
+                "은행"
+        ));
     }
 
     @PutMapping("/places/{placeId}")

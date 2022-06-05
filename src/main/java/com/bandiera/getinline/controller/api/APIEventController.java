@@ -1,5 +1,10 @@
 package com.bandiera.getinline.controller.api;
 
+import com.bandiera.getinline.constant.ErrorCode;
+import com.bandiera.getinline.dto.APIErrorResponse;
+import com.bandiera.getinline.exception.GeneralException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,12 +15,14 @@ public class APIEventController {
 
     @GetMapping("/events")
     public List<String> getEvents() {
-         return List.of("event1", "event2");
+        throw new GeneralException("test message");
+//         return List.of("event1", "event2");
     }
 
     @PostMapping("/events")
     public Boolean createEvent() {
-        return true;
+        throw new RuntimeException("runtime test message");
+//        return true;
     }
 
     @GetMapping("/events/{eventId")
@@ -32,4 +39,5 @@ public class APIEventController {
     public Boolean removeEvent(@PathVariable Integer eventId) {
         return true;
     }
+
 }

@@ -2,12 +2,10 @@ package com.bandiera.getinline.controller.api;
 
 import com.bandiera.getinline.constant.PlaceType;
 import com.bandiera.getinline.dto.APIDataResponse;
-import com.bandiera.getinline.dto.PlaceDTO;
 import com.bandiera.getinline.dto.PlaceResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequestMapping("/api")

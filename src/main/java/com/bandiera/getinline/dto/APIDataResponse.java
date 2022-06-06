@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class APIDataResponse<T> extends com.bandiera.getinline.dto.APIErrorResponse {
+public class APIDataResponse<T> extends APIErrorResponse {
 
     private final T data;
 

@@ -6,7 +6,7 @@
 이 서비스는 패스트캠퍼스의 한 번에 끝내는 Spring 완.전.판 초격차 패키지 Online 강의의 실습용 프로젝트로 사용되었습니다.
 
 ## 개발 환경
-* Intellij IDEA Ultimate 2021.1.
+* Intellij IDEA
 * Java 16
 * Gradle 7.1.1
 * Spring Boot 2.5.3

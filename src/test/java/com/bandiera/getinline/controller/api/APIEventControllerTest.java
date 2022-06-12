@@ -2,18 +2,25 @@ package com.bandiera.getinline.controller.api;
 
 import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
+import com.bandiera.getinline.dto.EventDTO;
 import com.bandiera.getinline.dto.EventResponse;
+import com.bandiera.getinline.service.EventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,6 +29,9 @@ class APIEventControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
+
+    @MockBean
+    private EventService eventService;
 
     public APIEventControllerTest(
             @Autowired MockMvc mvc,
@@ -35,9 +45,17 @@ class APIEventControllerTest {
     @Test
     void givenNothing_whenRequestingEvents_thenReturnsListOfEventsInStandardResponse() throws Exception {
         // Given
+        given(eventService.getEvents(any(), any(), any(), any(), any())).willReturn(List.of(createEventDTO()));
 
         // When & Then
-        mvc.perform(get("/api/events"))
+        mvc.perform(
+                get("/api/events")
+                        .queryParam("placeId", "1")
+                        .queryParam("eventName", "오전 공부")
+                        .queryParam("eventStatus", EventStatus.OPENED.name())
+                        .queryParam("eventStartDatetime", "2022-06-06T09:00:00")
+                        .queryParam("eventEndDatetime", "2022-06-06T11:00:00")
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.data").isArray())
@@ -56,6 +74,8 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
+
+        then(eventService).should().getEvents(any(), any(), any(), any(), any());
 
     }
 
@@ -178,5 +198,20 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
 
+    }
+
+    private EventDTO createEventDTO() {
+        return EventDTO.of(
+                1L,
+                "오전 공부",
+                EventStatus.OPENED,
+                LocalDateTime.of(2022, 6, 6, 9, 0, 0),
+                LocalDateTime.of(2022, 6, 6, 11, 0, 0),
+                0,
+                24,
+                "Spring boot Web Mcv - TDD",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
     }
 }

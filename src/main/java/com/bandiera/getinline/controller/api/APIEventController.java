@@ -7,7 +7,10 @@ import com.bandiera.getinline.dto.APIErrorResponse;
 import com.bandiera.getinline.dto.EventRequest;
 import com.bandiera.getinline.dto.EventResponse;
 import com.bandiera.getinline.exception.GeneralException;
+import com.bandiera.getinline.service.EventService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -16,22 +19,26 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RequestMapping("/api")
 @RestController
 public class APIEventController {
 
+    private final EventService eventService;
+
     @GetMapping("/events")
-    public APIDataResponse<List<EventResponse>> getEvents() {
-        return APIDataResponse.of(List.of(EventResponse.of(
-                1L,
-                "오전 공부",
-                EventStatus.OPENED,
-                LocalDateTime.of(2022, 6, 6, 9,0),
-                LocalDateTime.of(2022, 6, 6, 11,0),
-                0,
-                24,
-                "Spring boot Web Mcv - TDD"
-        )));
+    public APIDataResponse<List<EventResponse>> getEvents(
+            Long placeId,
+            String eventName,
+            EventStatus eventStatus,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
+    ) {
+        List<EventResponse> responses = eventService
+                .getEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime)
+                .stream().map(EventResponse::from).toList();
+
+        return APIDataResponse.of(responses);
     }
 
     @ResponseStatus(HttpStatus.CREATED)

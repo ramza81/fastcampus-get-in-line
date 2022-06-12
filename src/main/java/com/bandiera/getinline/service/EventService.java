@@ -50,17 +50,17 @@ public interface EventService {
     /**
      * 이벤트 ID와 이벤트 정보를 받아서 수정 후 결과를 반환
      *
-     * @param EventId 이벤트 ID
+     * @param eventId 이벤트 ID
      * @param eventDTO 이벤트 정보
      * @return
      */
-    boolean modifyEvent(Long EventId, EventDTO eventDTO);
+    boolean modifyEvent(Long eventId, EventDTO eventDTO);
 
     /**
      * 이벤트 ID를 받아서 삭제 후 결과를 반환
      *
-     * @param EventId 이벤트 ID
+     * @param eventId 이벤트 ID
      * @return
      */
-    boolean deleteEvent(Long EventId);
+    boolean deleteEvent(Long eventId);
 }

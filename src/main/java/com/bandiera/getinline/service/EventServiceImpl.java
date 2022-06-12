@@ -24,26 +24,26 @@ public class EventServiceImpl implements EventService {
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime
     ) {
-        return eventRepository.findEvents();
+        return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
     }
 
     @Override
     public Optional<EventDTO> getEvent(Long eventId) {
-        return Optional.empty();
+        return eventRepository.findEvent(eventId);
     }
 
     @Override
     public boolean createEvent(EventDTO eventDTO) {
-        return true;
+        return eventRepository.insertEvent(eventDTO);
     }
 
     @Override
-    public boolean modifyEvent(Long EventId, EventDTO eventDTO) {
-        return false;
+    public boolean modifyEvent(Long eventId, EventDTO eventDTO) {
+        return eventRepository.updateEvent(eventId, eventDTO);
     }
 
     @Override
-    public boolean deleteEvent(Long EventId) {
-        return false;
+    public boolean deleteEvent(Long eventId) {
+        return eventRepository.deleteEvent(eventId);
     }
 }

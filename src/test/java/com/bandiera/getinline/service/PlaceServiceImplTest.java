@@ -2,36 +2,48 @@ package com.bandiera.getinline.service;
 
 import com.bandiera.getinline.constant.PlaceType;
 import com.bandiera.getinline.dto.PlaceDTO;
-import org.junit.jupiter.api.BeforeEach;
+import com.bandiera.getinline.repository.PlaceRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
+@ExtendWith(MockitoExtension.class)
 class PlaceServiceImplTest {
 
+    @InjectMocks
     private PlaceServiceImpl sut;
 
-    @BeforeEach
-    void setUp() {
-        sut = new PlaceServiceImpl();
-    }
+    @Mock
+    private PlaceRepository placeRepository;
 
     @DisplayName("검색 조건 없이 장소를 검색하면, 전체 결과를 출력하여 보여준다.")
     @Test
     void givenNothing_whenSearchingPlaces_thenReturnsEntirePlaceList() {
         // Given
-
+        given(placeRepository.findPlaces(null, null, null, null))
+                .willReturn(List.of(
+                        createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310"),
+                        createPlaceDTO("대구시교육청", "대구광역시 수성구 수성로76길 11")
+                ));
 
         // When
         List<PlaceDTO> list = sut.getPlaces(null, null, null, null);
 
         // Then
         assertThat(list).hasSize(2);
+        then(placeRepository).should().findPlaces(null, null, null, null);
+
 
     }
 
@@ -43,6 +55,11 @@ class PlaceServiceImplTest {
         String placeName = "DGB대구은행 본점";
         String address = "대구광역시 수성구 달구벌대로 2310";
         String phoneNumber = "053-755-8760";
+
+        given(placeRepository.findPlaces(placeType, placeName, address, phoneNumber))
+                .willReturn(List.of(
+                        createPlaceDTO(placeType,"DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310",phoneNumber)
+                ));
 
         // When
         List<PlaceDTO> list = sut.getPlaces(placeType, placeName, address, phoneNumber);
@@ -57,6 +74,8 @@ class PlaceServiceImplTest {
                             .hasFieldOrPropertyWithValue("address",address)
                             .hasFieldOrPropertyWithValue("phoneNumber",phoneNumber);
                 });
+        then(placeRepository).should().findPlaces(placeType, placeName, address, phoneNumber);
+
 
     }
 
@@ -66,12 +85,14 @@ class PlaceServiceImplTest {
         // Given
         long placeId = 1L;
         PlaceDTO placeDTO = createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310");
+        given(placeRepository.findPlace(placeId)).willReturn(Optional.of(placeDTO));
 
         // When
         Optional<PlaceDTO> result = sut.getPlace(placeId);
 
         // Then
         assertThat(result).hasValue(placeDTO);
+        then(placeRepository).should().findPlace(placeId);
 
     }
 
@@ -80,12 +101,15 @@ class PlaceServiceImplTest {
     void givenEventId_whenSearchingNoneExistingEvent_thenReturnsEmptyEvent() {
         // Given
         long placeId = 2L;
+        PlaceDTO placeDTO = createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310");
+        given(placeRepository.findPlace(placeId)).willReturn(Optional.empty());
 
         // When
         Optional<PlaceDTO> result = sut.getPlace(placeId);
 
         // Then
         assertThat(result).isEmpty();
+        then(placeRepository).should().findPlace(placeId);
 
     }
 
@@ -94,12 +118,15 @@ class PlaceServiceImplTest {
     void givenPlace_whenCreating_thenCreatesPlaceAndReturnsTrue() {
         // Given
         PlaceDTO placeDTO = createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310");
+        given(placeRepository.insertPlace(placeDTO)).willReturn(true);
+
 
         // When
         boolean result = sut.createPlace(placeDTO);
 
         // Then
         assertThat(result).isTrue();
+        then(placeRepository).should().insertPlace(placeDTO);
 
     }
 
@@ -107,13 +134,14 @@ class PlaceServiceImplTest {
     @Test
     void givenNothing_whenCreating_thenAbortCreatingAndReturnsFalse() {
         // Given
-
+        given(placeRepository.insertPlace(null)).willReturn(false);
 
         // When
         boolean result = sut.createPlace(null);
 
         // Then
         assertThat(result).isFalse();
+        then(placeRepository).should().insertPlace(null);
 
     }
 
@@ -123,12 +151,14 @@ class PlaceServiceImplTest {
         // Given
         long placeId = 1L;
         PlaceDTO placeDTO = createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310");
+        given(placeRepository.updatePlace(placeId, placeDTO)).willReturn(true);
 
         // When
         boolean result = sut.modifyPlace(placeId, placeDTO);
 
         // Then
         assertThat(result).isTrue();
+        then(placeRepository).should().updatePlace(placeId, placeDTO);
 
     }
 
@@ -137,12 +167,15 @@ class PlaceServiceImplTest {
     void givenNoPlaceId_whenModifying_thenAbortModifyingAndReturnsFalse() {
         // Given
         PlaceDTO placeDTO = createPlaceDTO("DGB대구은행 본점", "대구광역시 수성구 달구벌대로 2310");
+        given(placeRepository.updatePlace(null, placeDTO)).willReturn(false);
+
 
         // When
         boolean result = sut.modifyPlace(null, placeDTO);
 
         // Then
         assertThat(result).isFalse();
+        then(placeRepository).should().updatePlace(null, placeDTO);
 
     }
 
@@ -151,12 +184,14 @@ class PlaceServiceImplTest {
     void givenPlaceIdOnly_whenModifying_thenAbortModifyingAndReturnsFalse() {
         // Given
         long placeId = 1L;
+        given(placeRepository.updatePlace(placeId, null)).willReturn(false);
 
         // When
         boolean result = sut.modifyPlace(placeId, null);
 
         // Then
         assertThat(result).isFalse();
+        then(placeRepository).should().updatePlace(placeId, null);
 
     }
 
@@ -165,12 +200,14 @@ class PlaceServiceImplTest {
     void givenPlaceId_whenDeleting_thenDeletesPlaceAndReturnsTrue() {
         // Given
         long placeId = 1L;
+        given(placeRepository.deletePlace(placeId)).willReturn(true);
 
         // When
         boolean result = sut.removePlace(placeId);
 
         // Then
         assertThat(result).isTrue();
+        then(placeRepository).should().deletePlace(placeId);
 
     }
 
@@ -178,12 +215,14 @@ class PlaceServiceImplTest {
     @Test
     void givenNothing_whenDeleting_thenAbortDeletingAndReturnsFalse() {
         // Given
+        given(placeRepository.deletePlace(null)).willReturn(false);
 
         // When
         boolean result = sut.removePlace(null);
 
         // Then
         assertThat(result).isFalse();
+        then(placeRepository).should().deletePlace(null);
 
     }
 

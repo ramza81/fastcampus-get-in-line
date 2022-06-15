@@ -4,6 +4,7 @@ import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
 import com.bandiera.getinline.dto.EventDTO;
 import com.bandiera.getinline.dto.EventResponse;
+import com.bandiera.getinline.service.EventService;
 import com.bandiera.getinline.service.EventServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -34,7 +35,7 @@ class APIEventControllerTest {
     private final ObjectMapper mapper;
 
     @MockBean
-    private EventServiceImpl eventService;
+    private EventService eventService;
 
     public APIEventControllerTest(
             @Autowired MockMvc mvc,
@@ -133,6 +134,7 @@ class APIEventControllerTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").value(Boolean.TRUE.toString()))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
@@ -162,7 +164,7 @@ class APIEventControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(mapper.writeValueAsString(eventResponse))
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.SPRING_BAD_REQUEST.getCode()))

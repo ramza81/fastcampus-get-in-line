@@ -1,7 +1,9 @@
 package com.bandiera.getinline.service;
 
+import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
 import com.bandiera.getinline.dto.EventDTO;
+import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,13 @@ public class EventServiceImpl implements EventService {
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime
     ) {
-        return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+        try {
+            return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+
     }
 
     @Override

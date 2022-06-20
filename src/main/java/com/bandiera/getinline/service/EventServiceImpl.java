@@ -6,12 +6,14 @@ import com.bandiera.getinline.dto.EventDTO;
 import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class EventServiceImpl implements EventService {
@@ -27,6 +29,7 @@ public class EventServiceImpl implements EventService {
             LocalDateTime eventEndDatetime
     ) {
         try {
+            log.debug("관찰 - placeId : {}", placeId);
             return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
         }
         catch (Exception e) {

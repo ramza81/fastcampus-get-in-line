@@ -35,7 +35,7 @@ class APIEventControllerTest {
     private final ObjectMapper mapper;
 
     @MockBean
-    private EventService eventService;
+    private EventServiceImpl eventService;
 
     public APIEventControllerTest(
             @Autowired MockMvc mvc,
@@ -99,7 +99,6 @@ class APIEventControllerTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").value(Boolean.TRUE.toString()))
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.VALIDATION_ERROR.getCode()))
                 .andExpect(jsonPath("$.message").value(containsString(ErrorCode.VALIDATION_ERROR.getMessage())));
@@ -110,27 +109,25 @@ class APIEventControllerTest {
 
     @DisplayName("[API][POST] 이벤트 생성")
     @Test
-    void givenEvent_whenRequestingEvents_thenReturnsSuccessfulInStandardResponse() throws Exception {
+    void givenEvent_whenCreatingAnEvent_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
         EventResponse eventResponse = EventResponse.of(
                 1L,
-                "오전 공부",
+                "오후 운동",
                 EventStatus.OPENED,
-                LocalDateTime.of(2022, 6, 6, 9,0),
-                LocalDateTime.of(2022, 6, 6, 11,0),
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
                 0,
                 24,
-                "Spring boot Web Mcv - TDD"
+                "마스크 꼭 착용하세요"
         );
-
         given(eventService.createEvent(any())).willReturn(true);
-
 
         // When & Then
         mvc.perform(
-                post("/api/events")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(eventResponse))
+                        post("/api/events")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(eventResponse))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -138,9 +135,7 @@ class APIEventControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
-
         then(eventService).should().createEvent(any());
-
     }
 
     @DisplayName("[API][POST] 이벤트 생성 - 잘못된 데이터 입력")

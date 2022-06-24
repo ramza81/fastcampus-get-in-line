@@ -40,21 +40,41 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Optional<EventDTO> getEvent(Long eventId) {
-        return eventRepository.findEvent(eventId);
+        try {
+            return eventRepository.findEvent(eventId);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Override
     public boolean createEvent(EventDTO eventDTO) {
-        return eventRepository.insertEvent(eventDTO);
+        try {
+            return eventRepository.insertEvent(eventDTO);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Override
     public boolean modifyEvent(Long eventId, EventDTO eventDTO) {
-        return eventRepository.updateEvent(eventId, eventDTO);
+        try {
+            return eventRepository.updateEvent(eventId, eventDTO);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
     @Override
     public boolean deleteEvent(Long eventId) {
-        return eventRepository.deleteEvent(eventId);
+        try {
+            return eventRepository.deleteEvent(eventId);
+        }
+        catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 }

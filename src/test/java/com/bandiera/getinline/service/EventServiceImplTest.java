@@ -23,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
+@DisplayName("비즈니스 로직 - 이벤트")
 @ExtendWith(MockitoExtension.class)
 class EventServiceImplTest {
 

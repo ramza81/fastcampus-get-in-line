@@ -21,9 +21,9 @@ public interface PlaceRepository extends
                 root.placeName,
                 root.phoneNumber
         );
-        bindings.bind(root.placeName).first(StringExpression::like);
-        bindings.bind(root.address).first(StringExpression::like);
-        bindings.bind(root.phoneNumber).first(StringExpression::like);
+        bindings.bind(root.placeName).first(StringExpression::containsIgnoreCase);
+        bindings.bind(root.address).first(StringExpression::containsIgnoreCase);
+        bindings.bind(root.phoneNumber).first(StringExpression::containsIgnoreCase);
 
     }
 }

@@ -25,7 +25,7 @@ public interface EventRepository extends
                 root.eventStartDatetime,
                 root.eventEndDatetime
                 );
-        bindings.bind(root.eventName).first(StringExpression::likeIgnoreCase);
+        bindings.bind(root.eventName).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.eventStartDatetime).first(ComparableExpression::goe);
         bindings.bind(root.eventEndDatetime).first(ComparableExpression::loe);
     }

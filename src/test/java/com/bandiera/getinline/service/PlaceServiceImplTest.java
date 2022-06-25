@@ -27,7 +27,6 @@ class PlaceServiceImplTest {
     @Mock
     private PlaceRepository placeRepository;
 
-    ?
 
     private PlaceDTO createPlaceDTO(String placeName, String address) {
 

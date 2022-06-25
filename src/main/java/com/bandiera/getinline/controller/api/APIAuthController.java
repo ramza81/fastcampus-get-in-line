@@ -5,8 +5,8 @@ import com.bandiera.getinline.dto.AdminRequest;
 import com.bandiera.getinline.dto.LoginRequest;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api")
-@RestController
+//@RequestMapping("/api")
+//@RestController
 public class APIAuthController {
 
     @PostMapping("/sign-up")

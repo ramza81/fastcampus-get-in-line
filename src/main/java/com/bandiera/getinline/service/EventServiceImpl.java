@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,8 @@ public class EventServiceImpl implements EventService {
     ) {
         try {
             log.debug("관찰 - placeId : {}", placeId);
-            return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+//            return eventRepository.findEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime);
+            return new ArrayList<>();
         }
         catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -41,7 +43,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public Optional<EventDTO> getEvent(Long eventId) {
         try {
-            return eventRepository.findEvent(eventId);
+//            return eventRepository.findEvent(eventId);
+            return Optional.empty();
         }
         catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -51,7 +54,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean createEvent(EventDTO eventDTO) {
         try {
-            return eventRepository.insertEvent(eventDTO);
+//            return eventRepository.insertEvent(eventDTO);
+            return true;
         }
         catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -61,7 +65,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean modifyEvent(Long eventId, EventDTO eventDTO) {
         try {
-            return eventRepository.updateEvent(eventId, eventDTO);
+//            return eventRepository.updateEvent(eventId, eventDTO);
+            return true;
         }
         catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
@@ -71,7 +76,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean deleteEvent(Long eventId) {
         try {
-            return eventRepository.deleteEvent(eventId);
+//            return eventRepository.deleteEvent(eventId);
+            return true;
         }
         catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);

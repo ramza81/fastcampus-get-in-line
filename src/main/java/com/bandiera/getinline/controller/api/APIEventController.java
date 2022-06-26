@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
-@Validated
+//@Validated
 @RequiredArgsConstructor
-@RequestMapping("/api")
-@RestController
+//@RequestMapping("/api")
+//@RestController
 public class APIEventController {
 
     private final EventService eventService;
@@ -34,9 +34,13 @@ public class APIEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
     ) {
-        List<EventResponse> responses = eventService
-                .getEvents(placeId, eventName, eventStatus, eventStartDatetime, eventEndDatetime)
-                .stream().map(EventResponse::from).toList();
+        List<EventResponse> responses = eventService.getEvents(
+                placeId,
+                eventName,
+                eventStatus,
+                eventStartDatetime,
+                eventEndDatetime
+        ).stream().map(EventResponse::from).toList();
 
         return APIDataResponse.of(responses);
     }

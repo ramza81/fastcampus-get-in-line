@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,26 +20,31 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public List<PlaceDTO> getPlaces(PlaceType placeType, String placeName, String address, String phoneNumber) {
-        return placeRepository.findPlaces(placeType, placeName, address, phoneNumber);
+        return new ArrayList<>();
+//        return placeRepository.findPlaces(placeType, placeName, address, phoneNumber);
     }
 
     @Override
     public Optional<PlaceDTO> getPlace(Long placeId) {
-        return placeRepository.findPlace(placeId);
+        return Optional.empty();
+//        return placeRepository.findPlace(placeId);
     }
 
     @Override
     public boolean createPlace(PlaceDTO placeDTO) {
-        return placeRepository.insertPlace(placeDTO);
+        return true;
+//        return placeRepository.insertPlace(placeDTO);
     }
 
     @Override
     public boolean modifyPlace(Long placeId, PlaceDTO placeDTO) {
-        return placeRepository.updatePlace(placeId, placeDTO);
+        return true;
+//        return placeRepository.updatePlace(placeId, placeDTO);
     }
 
     @Override
     public boolean removePlace(Long placeId) {
-        return placeRepository.deletePlace(placeId);
+        return true;
+//        return placeRepository.deletePlace(placeId);
     }
 }

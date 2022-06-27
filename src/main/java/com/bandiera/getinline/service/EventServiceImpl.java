@@ -8,6 +8,7 @@ import com.bandiera.getinline.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class EventServiceImpl implements EventService {
     public Optional<EventDTO> getEvent(Long eventId) {
         try {
 //            return eventRepository.findEvent(eventId);
+//            return eventRepository.findById(eventId).map(EventDTO::of);
             return Optional.empty();
         }
         catch (Exception e) {
@@ -52,9 +54,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public boolean createEvent(EventDTO eventDTO) {
         try {
 //            return eventRepository.insertEvent(eventDTO);
+//            eventRepository.save(eventDTO.to);
             return true;
         }
         catch (Exception e) {

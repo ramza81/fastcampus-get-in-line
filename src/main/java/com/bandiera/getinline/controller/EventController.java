@@ -21,29 +21,29 @@ public class EventController {
     public ModelAndView events() {
         Map<String, Object> map = new HashMap<>();
 
-        // TODO: 임시 데이터, 추후 삭제 예정
-        map.put("events", List.of(
-                EventResponse.of(
-                    1L,
-                    "오후 운동",
-                    EventStatus.OPENED,
-                    LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-                    LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-                    0,
-                    24,
-                    "마스크를 꼭 착용하세요"
-                ),
-                EventResponse.of(
-                        1L,
-                        "오후 운동",
-                        EventStatus.OPENED,
-                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-                        0,
-                        24,
-                        "마스크를 꼭 착용하세요"
-                )
-        ));
+//        // TODO: 임시 데이터, 추후 삭제 예정
+//        map.put("events", List.of(
+//                EventResponse.of(
+//                    1L,
+//                    "오후 운동",
+//                    EventStatus.OPENED,
+//                    LocalDateTime.of(2022, 6, 23, 13, 0, 0),
+//                    LocalDateTime.of(2022, 6, 23, 16, 0, 0),
+//                    0,
+//                    24,
+//                    "마스크를 꼭 착용하세요"
+//                ),
+//                EventResponse.of(
+//                        1L,
+//                        "오후 운동",
+//                        EventStatus.OPENED,
+//                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
+//                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
+//                        0,
+//                        24,
+//                        "마스크를 꼭 착용하세요"
+//                )
+//        ));
 
         return new ModelAndView("event/index", map);
     }
@@ -52,19 +52,19 @@ public class EventController {
     public ModelAndView eventDetail(@PathVariable Long  eventId) {
         Map<String, Object> map = new HashMap<>();
 
-        // TODO: 임시 데이터, 추후 삭제 예정
-        map.put("event", List.of(
-                EventResponse.of(
-                        1L,
-                        "오후 운동",
-                        EventStatus.OPENED,
-                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-                        0,
-                        24,
-                        "마스크를 꼭 착용하세요"
-                )
-        ));
+//        // TODO: 임시 데이터, 추후 삭제 예정
+//        map.put("event", List.of(
+//                EventResponse.of(
+//                        1L,
+//                        "오후 운동",
+//                        EventStatus.OPENED,
+//                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
+//                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
+//                        0,
+//                        24,
+//                        "마스크를 꼭 착용하세요"
+//                )
+//        ));
 
         return new ModelAndView("event/detail", map);
     }

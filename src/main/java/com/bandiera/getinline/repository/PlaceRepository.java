@@ -8,7 +8,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 
-// TODO : 인스턴스 생성 편의를 위해 임시로 default 사용, repository layer 구현이 완성되면 삭제할 것
 public interface PlaceRepository extends
         JpaRepository<Place, Long>,
         QuerydslPredicateExecutor<Place>,
@@ -17,14 +16,9 @@ public interface PlaceRepository extends
     @Override
     default void customize(QuerydslBindings bindings, QPlace root) {
         bindings.excludeUnlistedProperties(true);
-        bindings.including(
-                root.placeType,
-                root.placeName,
-                root.phoneNumber
-        );
+        bindings.including(root.placeName, root.address, root.phoneNumber);
         bindings.bind(root.placeName).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.address).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.phoneNumber).first(StringExpression::containsIgnoreCase);
-
     }
 }

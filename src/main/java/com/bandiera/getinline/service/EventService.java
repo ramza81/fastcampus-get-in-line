@@ -1,7 +1,7 @@
 package com.bandiera.getinline.service;
 
 import com.bandiera.getinline.constant.EventStatus;
-import com.bandiera.getinline.dto.EventDTO;
+import com.bandiera.getinline.dto.EventDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +23,7 @@ public interface EventService {
      * @param eventEndDatetime 종료시간
      * @return
      */
-    List<EventDTO> getEvents(
+    List<EventDto> getEvents(
             Long placeId,
             String eventName,
             EventStatus eventStatus,
@@ -37,7 +37,7 @@ public interface EventService {
      * @param eventId 이벤트 ID
      * @return
      */
-    Optional<EventDTO> getEvent(Long eventId);
+    Optional<EventDto> getEvent(Long eventId);
 
     /**
      * 이벤트 정보를 받아서 생성 후 결과를 반환
@@ -45,7 +45,7 @@ public interface EventService {
      * @param eventDTO 이벤트 정보
      * @return
      */
-    boolean createEvent(EventDTO eventDTO);
+    boolean createEvent(EventDto eventDTO);
 
     /**
      * 이벤트 ID와 이벤트 정보를 받아서 수정 후 결과를 반환
@@ -54,7 +54,7 @@ public interface EventService {
      * @param eventDTO 이벤트 정보
      * @return
      */
-    boolean modifyEvent(Long eventId, EventDTO eventDTO);
+    boolean modifyEvent(Long eventId, EventDto eventDTO);
 
     /**
      * 이벤트 ID를 받아서 삭제 후 결과를 반환

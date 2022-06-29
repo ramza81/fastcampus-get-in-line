@@ -16,15 +16,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Deprecated
 @Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
 @DisplayName("API 컨트롤러 - 장소")
-@WebMvcTest(APIPlaceController.class)
-class APIPlaceControllerTest {
+@WebMvcTest(ApiPlaceController.class)
+class ApiPlaceControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
 
-    public APIPlaceControllerTest(
+    public ApiPlaceControllerTest(
             @Autowired MockMvc mvc,
             @Autowired ObjectMapper mapper
     ) {
@@ -59,20 +60,20 @@ class APIPlaceControllerTest {
     @Test
     void givenPlace_whenCreatingAPlace_thenReturnsSuccessfulStandardResponse() throws Exception {
         // Given
-        PlaceResponse placeResponse = PlaceResponse.of(
+        PlaceRequest placeRequest = PlaceRequest.of(
                 PlaceType.COMMON,
-                "DGB대구은행 본점",
-                "대구광역시 수성구 달구벌대로 2310",
-                "053-755-8760",
-                100,
-                "은행"
+                "랄라배드민턴장",
+                "서울시 강남구 강남대로 1234",
+                "010-1234-5678",
+                30,
+                "신장개업"
         );
 
         // When & Then
         mvc.perform(
                 post("/api/places")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(placeResponse))
+                        .content(mapper.writeValueAsString(placeRequest))
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

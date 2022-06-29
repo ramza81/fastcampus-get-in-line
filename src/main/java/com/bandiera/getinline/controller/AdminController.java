@@ -2,8 +2,10 @@ package com.bandiera.getinline.controller;
 
 import com.bandiera.getinline.constant.EventStatus;
 import com.bandiera.getinline.constant.PlaceType;
-import com.bandiera.getinline.dto.EventDTO;
-import com.bandiera.getinline.dto.PlaceDTO;
+import com.bandiera.getinline.dto.EventDto;
+import com.bandiera.getinline.dto.PlaceDto;
+import com.bandiera.getinline.service.EventServiceImpl;
+import com.bandiera.getinline.service.PlaceServiceImpl;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +16,19 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RequestMapping("/admin")
 @Controller
 public class AdminController {
+
+    private final PlaceServiceImpl placeService;
+    private final EventServiceImpl eventService;
+
+    public AdminController(PlaceServiceImpl placeService, EventServiceImpl eventService) {
+        this.placeService = placeService;
+        this.eventService = eventService;
+    }
 
     @GetMapping("/places")
     public ModelAndView adminPlaces(
@@ -35,17 +46,9 @@ public class AdminController {
 
     @GetMapping("/places/{placeId}")
     public ModelAndView adminPlaceDetail(@PathVariable Long placeId) {
+        Optional<PlaceDto> placeDto = placeService.getPlace(placeId);
         Map<String, Object> map = new HashMap<>();
-        map.put("place", PlaceDTO.of(
-                PlaceType.COMMON,
-                "DGB대구은행 본점",
-                "대구광역시 수성구 달구벌대로 2310",
-                "053-755-8760",
-                100,
-                "은행",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        ));
+        map.put("place", placeDto);
 
         return new ModelAndView("admin/place-detail", map);
     }
@@ -70,19 +73,10 @@ public class AdminController {
 
     @GetMapping("/events/{eventId}")
     public ModelAndView adminEventDetail(@PathVariable Long eventId) {
+        Optional<EventDto> event = eventService.getEvent(eventId);
+
         Map<String, Object> map = new HashMap<>();
-        map.put("event", EventDTO.of(
-                1L,
-                "오전 공부",
-                EventStatus.OPENED,
-                LocalDateTime.of(2022, 6, 6, 9,0),
-                LocalDateTime.of(2022, 6, 6, 11,0),
-                0,
-                24,
-                "Spring boot Web Mcv - TDD",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        ));
+        map.put("event", event);
 
         return new ModelAndView("admin/event-detail", map);
     }

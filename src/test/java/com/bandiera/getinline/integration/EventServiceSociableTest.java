@@ -1,7 +1,6 @@
 package com.bandiera.getinline.integration;
 
-import com.bandiera.getinline.dto.EventDTO;
-import com.bandiera.getinline.service.EventService;
+import com.bandiera.getinline.dto.EventDto;
 import com.bandiera.getinline.service.EventServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ public class EventServiceSociableTest {
         // Given
 
         // When
-        List<EventDTO> list = sut.getEvents(3L, null, null, null, null);
+        List<EventDto> list = sut.getEvents(3L, null, null, null, null);
 
         // Then
         assertThat(list).hasSize(0);

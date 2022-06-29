@@ -1,7 +1,7 @@
 package com.bandiera.getinline.controller.error;
 
 import com.bandiera.getinline.constant.ErrorCode;
-import com.bandiera.getinline.dto.APIErrorResponse;
+import com.bandiera.getinline.dto.ApiErrorResponse;
 import com.bandiera.getinline.exception.GeneralException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,14 +19,14 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("핸들러 - API 에러 처리")
-class APIExceptionHandlerTest {
+class ApiExceptionHandlerTest {
 
-    private APIExceptionHandler sut;
+    private ApiExceptionHandler sut;
     private WebRequest webRequest;
 
     @BeforeEach
     void setUp() {
-        sut = new APIExceptionHandler();
+        sut = new ApiExceptionHandler();
         webRequest = new DispatcherServletWebRequest(new MockHttpServletRequest());
     }
 
@@ -41,7 +41,7 @@ class APIExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, ErrorCode.VALIDATION_ERROR, e))
+                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ErrorCode.VALIDATION_ERROR, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST);
 
@@ -60,7 +60,7 @@ class APIExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, errorCode, e))
+                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, errorCode, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode",HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -77,7 +77,7 @@ class APIExceptionHandlerTest {
 
         // Then
         assertThat(response)
-                .hasFieldOrPropertyWithValue("body", APIErrorResponse.of(false, ErrorCode.INTERNAL_ERROR, e))
+                .hasFieldOrPropertyWithValue("body", ApiErrorResponse.of(false, ErrorCode.INTERNAL_ERROR, e))
                 .hasFieldOrPropertyWithValue("headers", HttpHeaders.EMPTY)
                 .hasFieldOrPropertyWithValue("statusCode",HttpStatus.INTERNAL_SERVER_ERROR);
 

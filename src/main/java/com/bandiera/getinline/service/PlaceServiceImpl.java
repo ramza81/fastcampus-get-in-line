@@ -1,16 +1,18 @@
 package com.bandiera.getinline.service;
 
+import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.PlaceType;
-import com.bandiera.getinline.dto.PlaceDTO;
-import com.bandiera.getinline.repository.EventRepository;
+import com.bandiera.getinline.dto.PlaceDto;
+import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.PlaceRepository;
+import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service
@@ -18,33 +20,63 @@ public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository placeRepository;
 
-    @Override
-    public List<PlaceDTO> getPlaces(PlaceType placeType, String placeName, String address, String phoneNumber) {
-        return new ArrayList<>();
-//        return placeRepository.findPlaces(placeType, placeName, address, phoneNumber);
+    public List<PlaceDto> getPlaces(Predicate predicate) {
+        try {
+            return StreamSupport.stream(placeRepository.findAll(predicate).spliterator(), false)
+                    .map(PlaceDto::of)
+                    .toList();
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
-    @Override
-    public Optional<PlaceDTO> getPlace(Long placeId) {
-        return Optional.empty();
-//        return placeRepository.findPlace(placeId);
+    public Optional<PlaceDto> getPlace(Long placeId) {
+        try {
+            return placeRepository.findById(placeId).map(PlaceDto::of);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
-    @Override
-    public boolean createPlace(PlaceDTO placeDTO) {
-        return true;
-//        return placeRepository.insertPlace(placeDTO);
+    public boolean createPlace(PlaceDto placeDto) {
+        try {
+            if (placeDto == null) {
+                return false;
+            }
+
+            placeRepository.save(placeDto.toEntity());
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
-    @Override
-    public boolean modifyPlace(Long placeId, PlaceDTO placeDTO) {
-        return true;
-//        return placeRepository.updatePlace(placeId, placeDTO);
+    public boolean modifyPlace(Long placeId, PlaceDto dto) {
+        try {
+            if (placeId == null || dto == null) {
+                return false;
+            }
+
+            placeRepository.findById(placeId)
+                    .ifPresent(place -> placeRepository.save(dto.updateEntity(place)));
+
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
 
-    @Override
     public boolean removePlace(Long placeId) {
-        return true;
-//        return placeRepository.deletePlace(placeId);
+        try {
+            if (placeId == null) {
+                return false;
+            }
+
+            placeRepository.deleteById(placeId);
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
     }
+
 }

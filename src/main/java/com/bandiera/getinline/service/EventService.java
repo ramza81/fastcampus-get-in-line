@@ -4,11 +4,14 @@ import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
 import com.bandiera.getinline.domain.Place;
 import com.bandiera.getinline.dto.EventDto;
+import com.bandiera.getinline.dto.EventViewResponse;
 import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.EventRepository;
 import com.bandiera.getinline.repository.PlaceRepository;
 import com.querydsl.core.types.Predicate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,15 +36,23 @@ public class EventService {
         }
     }
 
-    public List<EventDto> getEvents(
-            Long placeId,
+    public Page<EventViewResponse> getEventViewResponse(
+            String placeName,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
-            LocalDateTime eventEndDatetime
+            LocalDateTime eventEndDatetime,
+            Pageable pageable
     ) {
         try {
-            return null;
+            return eventRepository.findEventViewPageBySearchParams(
+                    placeName,
+                    eventName,
+                    eventStatus,
+                    eventStartDatetime,
+                    eventEndDatetime,
+                    pageable
+            );
         } catch (Exception e) {
             throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
         }

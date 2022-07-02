@@ -10,7 +10,6 @@ import com.bandiera.getinline.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,15 +35,27 @@ public class ApiEventController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
     ) {
-        List<EventResponse> eventResponses = eventService.getEvents(
-                placeId,
-                eventName,
-                eventStatus,
-                eventStartDatetime,
-                eventEndDatetime
-        ).stream().map(EventResponse::from).toList();
-
-        return ApiDataResponse.of(eventResponses);
+        return ApiDataResponse.of(List.of(EventResponse.of(
+                1L,
+                PlaceDto.of(
+                        1L,
+                        PlaceType.SPORTS,
+                        "배드민턴장",
+                        "서울시 가나구 다라동",
+                        "010-1111-2222",
+                        0,
+                        null,
+                        LocalDateTime.now(),
+                        LocalDateTime.now()
+                ),
+                "오후 운동",
+                EventStatus.OPENED,
+                LocalDateTime.of(2021, 1, 1, 13, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 16, 0, 0),
+                0,
+                24,
+                "마스크 꼭 착용하세요"
+        )));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

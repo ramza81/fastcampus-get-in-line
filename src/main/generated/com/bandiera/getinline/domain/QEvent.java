@@ -34,8 +34,7 @@ public class QEvent extends EntityPathBase<Event> {
 
     public final DateTimePath<java.time.LocalDateTime> eventStartDatetime = createDateTime("eventStartDatetime", java.time.LocalDateTime.class);
 
-    // custom
-    public final com.bandiera.getinline.constant.QEventStatus eventStatus = new com.bandiera.getinline.constant.QEventStatus(forProperty("eventStatus"));
+    public final EnumPath<com.bandiera.getinline.constant.EventStatus> eventStatus = createEnum("eventStatus", com.bandiera.getinline.constant.EventStatus.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

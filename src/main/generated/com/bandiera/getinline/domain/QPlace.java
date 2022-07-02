@@ -40,8 +40,7 @@ public class QPlace extends EntityPathBase<Place> {
 
     public final StringPath placeName = createString("placeName");
 
-    // custom
-    public final com.bandiera.getinline.constant.QPlaceType placeType = new com.bandiera.getinline.constant.QPlaceType(forProperty("placeType"));
+    public final EnumPath<com.bandiera.getinline.constant.PlaceType> placeType = createEnum("placeType", com.bandiera.getinline.constant.PlaceType.class);
 
     public QPlace(String variable) {
         super(Place.class, forVariable(variable));

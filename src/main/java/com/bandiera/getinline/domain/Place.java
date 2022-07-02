@@ -29,7 +29,6 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Setter
     @Column(nullable = false, columnDefinition = "varchar(20) default 'COMMON'")
     @Enumerated(EnumType.STRING)

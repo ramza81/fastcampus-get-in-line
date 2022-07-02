@@ -1,71 +1,53 @@
 package com.bandiera.getinline.controller;
 
-import com.bandiera.getinline.constant.EventStatus;
+import com.bandiera.getinline.constant.ErrorCode;
+import com.bandiera.getinline.domain.Event;
 import com.bandiera.getinline.dto.EventResponse;
+import com.bandiera.getinline.exception.GeneralException;
+import com.bandiera.getinline.service.EventService;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RequestMapping("/events")
 @Controller
 public class EventController {
 
-    @GetMapping
-    public ModelAndView events() {
-        Map<String, Object> map = new HashMap<>();
+    private final EventService eventService;
 
-//        // TODO: 임시 데이터, 추후 삭제 예정
-//        map.put("events", List.of(
-//                EventResponse.of(
-//                    1L,
-//                    "오후 운동",
-//                    EventStatus.OPENED,
-//                    LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-//                    LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-//                    0,
-//                    24,
-//                    "마스크를 꼭 착용하세요"
-//                ),
-//                EventResponse.of(
-//                        1L,
-//                        "오후 운동",
-//                        EventStatus.OPENED,
-//                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-//                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-//                        0,
-//                        24,
-//                        "마스크를 꼭 착용하세요"
-//                )
-//        ));
+    @GetMapping
+    public ModelAndView events(@QuerydslPredicate(root = Event.class) Predicate predicate) {
+        Map<String, Object> map = new HashMap<>();
+        List<EventResponse> events = eventService.getEvents(predicate)
+                .stream()
+                .map(EventResponse::from)
+                .toList();
+
+        map.put("events", events);
 
         return new ModelAndView("event/index", map);
     }
 
     @GetMapping("/{eventId}")
-    public ModelAndView eventDetail(@PathVariable Long  eventId) {
+    public ModelAndView eventDetail(@PathVariable Long eventId) {
         Map<String, Object> map = new HashMap<>();
+        EventResponse event = eventService.getEvent(eventId)
+                .map(EventResponse::from)
+                .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
 
-//        // TODO: 임시 데이터, 추후 삭제 예정
-//        map.put("event", List.of(
-//                EventResponse.of(
-//                        1L,
-//                        "오후 운동",
-//                        EventStatus.OPENED,
-//                        LocalDateTime.of(2022, 6, 23, 13, 0, 0),
-//                        LocalDateTime.of(2022, 6, 23, 16, 0, 0),
-//                        0,
-//                        24,
-//                        "마스크를 꼭 착용하세요"
-//                )
-//        ));
+        map.put("event", event);
 
         return new ModelAndView("event/detail", map);
     }
+
 }

@@ -1,5 +1,7 @@
 package com.bandiera.getinline.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
 import com.bandiera.getinline.constant.PlaceType;
@@ -9,8 +11,6 @@ import com.bandiera.getinline.dto.EventDto;
 import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.EventRepository;
 import com.bandiera.getinline.repository.PlaceRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +30,9 @@ import static org.mockito.BDDMockito.*;
 
 @DisplayName("비즈니스 로직 - 이벤트")
 @ExtendWith(MockitoExtension.class)
-class EventServiceImplTest {
+class EventServiceTest {
 
-    @InjectMocks private EventServiceImpl sut;
+    @InjectMocks private EventService sut;
     @Mock private EventRepository eventRepository;
     @Mock private PlaceRepository placeRepository;
 
@@ -269,7 +269,7 @@ class EventServiceImplTest {
         willDoNothing().given(eventRepository).deleteById(eventId);
 
         // When
-        boolean result = sut.deleteEvent(eventId);
+        boolean result = sut.removeEvent(eventId);
 
         // Then
         assertThat(result).isTrue();
@@ -282,7 +282,7 @@ class EventServiceImplTest {
         // Given
 
         // When
-        boolean result = sut.deleteEvent(null);
+        boolean result = sut.removeEvent(null);
 
         // Then
         assertThat(result).isFalse();
@@ -298,7 +298,7 @@ class EventServiceImplTest {
         willThrow(e).given(eventRepository).deleteById(eventId);
 
         // When
-        Throwable thrown = catchThrowable(() -> sut.deleteEvent(eventId));
+        Throwable thrown = catchThrowable(() -> sut.removeEvent(eventId));
 
         // Then
         assertThat(thrown)

@@ -1,6 +1,5 @@
 package com.bandiera.getinline.domain;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,6 +28,7 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Setter
     @Column(nullable = false, unique = true)
     private String email;
@@ -45,10 +45,13 @@ public class Admin {
     @Column(nullable = false)
     private String phoneNumber;
 
+
     @Setter
     private String memo;
 
+
     @ToString.Exclude
+    @OrderBy("id")
     @OneToMany(mappedBy = "admin")
     private final Set<AdminPlaceMap> adminPlaceMaps = new LinkedHashSet<>();
 
@@ -63,6 +66,7 @@ public class Admin {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
+
     protected Admin() {}
 
     protected Admin(String email, String nickname, String password, String phoneNumber, String memo) {
@@ -76,6 +80,7 @@ public class Admin {
     public static Admin of(String email, String nickname, String password, String phoneNumber, String memo) {
         return new Admin(email, nickname, password, phoneNumber, memo);
     }
+
 
     @Override
     public boolean equals(Object obj) {

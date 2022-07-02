@@ -1,13 +1,13 @@
 package com.bandiera.getinline.service;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.PlaceType;
 import com.bandiera.getinline.domain.Place;
 import com.bandiera.getinline.dto.PlaceDto;
 import com.bandiera.getinline.exception.GeneralException;
 import com.bandiera.getinline.repository.PlaceRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,10 +24,11 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
+@DisplayName("비즈니스 로직 - 장소")
 @ExtendWith(MockitoExtension.class)
-class PlaceServiceImplTest {
+class PlaceServiceTest {
 
-    @InjectMocks private PlaceServiceImpl sut;
+    @InjectMocks private PlaceService sut;
     @Mock private PlaceRepository placeRepository;
 
     @DisplayName("장소를 검색하면, 결과를 출력하여 보여준다.")

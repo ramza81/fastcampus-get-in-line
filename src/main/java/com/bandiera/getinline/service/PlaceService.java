@@ -1,57 +1,81 @@
 package com.bandiera.getinline.service;
 
+import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.PlaceType;
 import com.bandiera.getinline.dto.PlaceDto;
+import com.bandiera.getinline.exception.GeneralException;
+import com.bandiera.getinline.repository.PlaceRepository;
 import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-/**
- * 장소 서비스
- *
- * @author BANDIERA
- */
-public interface PlaceService {
+@RequiredArgsConstructor
+@Service
+public class PlaceService {
 
-    /**
-     * 검색어를 받아서 장소 리스트를 반환
-     *
-     * @param predicate
-     * @return
-     */
-    List<PlaceDto> getPlaces(Predicate predicate);
+    private final PlaceRepository placeRepository;
 
-    /**
-     * 장소 ID를 받아서 장소를 반환
-     *
-     * @param placeId 장소 ID
-     * @return
-     */
-    Optional<PlaceDto> getPlace(Long placeId);
+    public List<PlaceDto> getPlaces(Predicate predicate) {
+        try {
+            return StreamSupport.stream(placeRepository.findAll(predicate).spliterator(), false)
+                    .map(PlaceDto::of)
+                    .toList();
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 
-    /**
-     * 장소 정보를 받아서 생성 후 결과를 반환
-     *
-     * @param placeDTO 장소 정보
-     * @return
-     */
-    boolean createPlace(PlaceDto placeDTO);
+    public Optional<PlaceDto> getPlace(Long placeId) {
+        try {
+            return placeRepository.findById(placeId).map(PlaceDto::of);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 
-    /**
-     * 장소 ID와 장소 정보를 받아서 수정 후 결과를 반환
-     *
-     * @param placeId 장소 ID
-     * @param placeDTO 장소 정보
-     * @return
-     */
-    boolean modifyPlace(Long placeId, PlaceDto placeDTO);
+    public boolean createPlace(PlaceDto placeDto) {
+        try {
+            if (placeDto == null) {
+                return false;
+            }
 
-    /**
-     * 장소 ID를 받아서 삭제 후 결과를 반환
-     *
-     * @param placeId 장소 ID
-     * @return
-     */
-    boolean removePlace(Long placeId);
+            placeRepository.save(placeDto.toEntity());
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    public boolean modifyPlace(Long placeId, PlaceDto dto) {
+        try {
+            if (placeId == null || dto == null) {
+                return false;
+            }
+
+            placeRepository.findById(placeId)
+                    .ifPresent(place -> placeRepository.save(dto.updateEntity(place)));
+
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    public boolean removePlace(Long placeId) {
+        try {
+            if (placeId == null) {
+                return false;
+            }
+
+            placeRepository.deleteById(placeId);
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
 }

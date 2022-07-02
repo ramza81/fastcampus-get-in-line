@@ -1,7 +1,6 @@
 package com.bandiera.getinline.constant;
 
 import com.bandiera.getinline.exception.GeneralException;
-import org.apache.tomcat.jni.Error;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayName("에러 처리 - 에러 코드")

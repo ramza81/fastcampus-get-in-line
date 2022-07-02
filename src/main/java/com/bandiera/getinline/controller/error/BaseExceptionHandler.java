@@ -2,7 +2,6 @@ package com.bandiera.getinline.controller.error;
 
 import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.exception.GeneralException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;

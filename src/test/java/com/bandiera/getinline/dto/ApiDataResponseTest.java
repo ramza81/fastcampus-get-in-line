@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("데이터 - API 기본 응답")
-class APIDataResponseTest {
+class ApiDataResponseTest {
 
     @DisplayName("문자열 데이터가 주어지면, 표준 성공 응답을 생성한다.")
     @Test
@@ -26,9 +26,9 @@ class APIDataResponseTest {
                 .hasFieldOrPropertyWithValue("data", data);
     }
 
-    @DisplayName("데이터가 없을때, 비어있는 표준 성공 응답을 생성한다.")
+    @DisplayName("데이터가 없을 때, 비어있는 표준 성공 응답을 생성한다.")
     @Test
-    void givenNothing_whenCreatingResponse_thenReturnsEmptyResponse() {
+    void givenNothing_whenCreatingResponse_thenReturnsEmptySuccessfulResponse() {
         // Given
 
         // When

@@ -27,13 +27,13 @@ class BaseControllerTest {
     void givenNothing_whenRequestingRootPage_thenReturnsIndexPage() throws Exception {
         // Given
 
-
         // When & Then
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(content().string(containsString("This is default page.")))
                 .andExpect(view().name("index"))
                 .andDo(print());
     }
+
 }

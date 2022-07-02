@@ -1,40 +1,42 @@
 package com.bandiera.getinline.controller.api;
 
 import com.bandiera.getinline.constant.EventStatus;
-import com.bandiera.getinline.dto.APIDataResponse;
+import com.bandiera.getinline.constant.PlaceType;
+import com.bandiera.getinline.dto.ApiDataResponse;
 import com.bandiera.getinline.dto.EventRequest;
 import com.bandiera.getinline.dto.EventResponse;
+import com.bandiera.getinline.dto.PlaceDto;
 import com.bandiera.getinline.service.EventService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
-//@Validated
+@Deprecated
 @RequiredArgsConstructor
+//@Validated
 //@RequestMapping("/api")
 //@RestController
-public class APIEventController {
+public class ApiEventController {
 
     private final EventService eventService;
 
     @GetMapping("/events")
-    public APIDataResponse<List<EventResponse>> getEvents(
+    public ApiDataResponse<List<EventResponse>> getEvents(
             @Positive Long placeId,
             @Size(min = 2) String eventName,
             EventStatus eventStatus,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventStartDatetime,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime eventEndDatetime
     ) {
-        List<EventResponse> responses = eventService.getEvents(
+        List<EventResponse> eventResponses = eventService.getEvents(
                 placeId,
                 eventName,
                 eventStatus,
@@ -42,45 +44,38 @@ public class APIEventController {
                 eventEndDatetime
         ).stream().map(EventResponse::from).toList();
 
-        return APIDataResponse.of(responses);
+        return ApiDataResponse.of(eventResponses);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/events")
-    public APIDataResponse<Void> createEvent(@Validated @RequestBody EventRequest eventRequest) {
-        log.debug("보고 싶은 값: {}", eventRequest);
-        return APIDataResponse.empty();
+    public ApiDataResponse<String> createEvent(@Valid @RequestBody EventRequest eventRequest) {
+        boolean result = eventService.createEvent(eventRequest.toDTO());
+
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
     @GetMapping("/events/{eventId}")
-    public APIDataResponse<EventResponse> getEvent(@PathVariable Long eventId) {
-        if (eventId.equals(2L)) {
-            return APIDataResponse.empty();
-        }
+    public ApiDataResponse<EventResponse> getEvent(@Positive @PathVariable Long eventId) {
+        EventResponse eventResponse = EventResponse.from(eventService.getEvent(eventId).orElse(null));
 
-        return APIDataResponse.of(EventResponse.of(
-                1L,
-                "오전 공부",
-                EventStatus.OPENED,
-                LocalDateTime.of(2022, 6, 6, 9,0),
-                LocalDateTime.of(2022, 6, 6, 11,0),
-                0,
-                24,
-                "Spring boot Web Mcv - TDD"
-        ));
+        return ApiDataResponse.of(eventResponse);
     }
 
     @PutMapping("/events/{eventId}")
-    public APIDataResponse<Void> modifyEvent(
-            @PathVariable Long eventId,
-            @RequestBody EventRequest eventRequest
+    public ApiDataResponse<String> modifyEvent(
+            @Positive @PathVariable Long eventId,
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        return APIDataResponse.empty();
+        boolean result = eventService.modifyEvent(eventId, eventRequest.toDTO());
+        return ApiDataResponse.of(Boolean.toString(result));
     }
-    
+
     @DeleteMapping("/events/{eventId}")
-    public APIDataResponse<Void> removeEvent(@PathVariable Long eventId) {
-        return APIDataResponse.empty();
+    public ApiDataResponse<String> removeEvent(@Positive @PathVariable Long eventId) {
+        boolean result = eventService.removeEvent(eventId);
+
+        return ApiDataResponse.of(Boolean.toString(result));
     }
 
 }

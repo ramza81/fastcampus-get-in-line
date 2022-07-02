@@ -1,66 +1,100 @@
 package com.bandiera.getinline.service;
 
+import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.constant.EventStatus;
-import com.bandiera.getinline.dto.EventDTO;
+import com.bandiera.getinline.domain.Place;
+import com.bandiera.getinline.dto.EventDto;
+import com.bandiera.getinline.exception.GeneralException;
+import com.bandiera.getinline.repository.EventRepository;
+import com.bandiera.getinline.repository.PlaceRepository;
+import com.querydsl.core.types.Predicate;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
-/**
- * 이벤트 서비스
- *
- * @author Bandiera
- */
-public interface EventService {
-    /**
-     * 검색어를 받아서 이벤트 리스트를 반환
-     *
-     * @param placeId 장소 ID
-     * @param eventName 이벤트 이름
-     * @param eventStatus 이벤트 상태
-     * @param eventStartDatetime 시작시간
-     * @param eventEndDatetime 종료시간
-     * @return
-     */
-    List<EventDTO> getEvents(
+@RequiredArgsConstructor
+@Service
+public class EventService {
+
+    private final EventRepository eventRepository;
+    private final PlaceRepository placeRepository;
+
+    public List<EventDto> getEvents(Predicate predicate) {
+        try {
+            return StreamSupport.stream(eventRepository.findAll(predicate).spliterator(), false)
+                    .map(EventDto::of)
+                    .toList();
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    public List<EventDto> getEvents(
             Long placeId,
             String eventName,
             EventStatus eventStatus,
             LocalDateTime eventStartDatetime,
             LocalDateTime eventEndDatetime
-    );
+    ) {
+        try {
+            return null;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 
-    /**
-     *  이벤트 ID를 받아서 이벤트를 반환
-     *
-     * @param eventId 이벤트 ID
-     * @return
-     */
-    Optional<EventDTO> getEvent(Long eventId);
+    public Optional<EventDto> getEvent(Long eventId) {
+        try {
+            return eventRepository.findById(eventId).map(EventDto::of);
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 
-    /**
-     * 이벤트 정보를 받아서 생성 후 결과를 반환
-     *
-     * @param eventDTO 이벤트 정보
-     * @return
-     */
-    boolean createEvent(EventDTO eventDTO);
+    public boolean createEvent(EventDto eventDTO) {
+        try {
+            if (eventDTO == null) {
+                return false;
+            }
 
-    /**
-     * 이벤트 ID와 이벤트 정보를 받아서 수정 후 결과를 반환
-     *
-     * @param eventId 이벤트 ID
-     * @param eventDTO 이벤트 정보
-     * @return
-     */
-    boolean modifyEvent(Long eventId, EventDTO eventDTO);
+            Place place = placeRepository.findById(eventDTO.placeDto().id())
+                    .orElseThrow(() -> new GeneralException(ErrorCode.NOT_FOUND));
+            eventRepository.save(eventDTO.toEntity(place));
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 
-    /**
-     * 이벤트 ID를 받아서 삭제 후 결과를 반환
-     *
-     * @param eventId 이벤트 ID
-     * @return
-     */
-    boolean deleteEvent(Long eventId);
+    public boolean modifyEvent(Long eventId, EventDto dto) {
+        try {
+            if (eventId == null || dto == null) {
+                return false;
+            }
+
+            eventRepository.findById(eventId)
+                    .ifPresent(event -> eventRepository.save(dto.updateEntity(event)));
+
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
+
+    public boolean removeEvent(Long eventId) {
+        try {
+            if (eventId == null) {
+                return false;
+            }
+
+            eventRepository.deleteById(eventId);
+            return true;
+        } catch (Exception e) {
+            throw new GeneralException(ErrorCode.DATA_ACCESS_ERROR, e);
+        }
+    }
 }

@@ -8,8 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayName("에러 처리 - 기본 예외")
@@ -39,7 +38,10 @@ class GeneralExceptionTest {
                 arguments(new GeneralException(msg, t), msg, ErrorCode.INTERNAL_ERROR),
                 arguments(new GeneralException(t), "Internal error - " + t.getMessage(), ErrorCode.INTERNAL_ERROR),
                 arguments(new GeneralException(errorCode), errorCode.getMessage(), errorCode),
+                arguments(new GeneralException(errorCode, msg), msg, errorCode),
+                arguments(new GeneralException(errorCode, msg, t), msg, errorCode),
                 arguments(new GeneralException(errorCode, t), errorCode.getMessage() + " - " + t.getMessage(), errorCode)
         );
     }
+
 }

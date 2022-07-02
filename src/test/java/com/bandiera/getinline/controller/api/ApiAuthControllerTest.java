@@ -1,9 +1,9 @@
 package com.bandiera.getinline.controller.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.bandiera.getinline.constant.ErrorCode;
 import com.bandiera.getinline.dto.AdminRequest;
 import com.bandiera.getinline.dto.LoginRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,15 +15,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Deprecated
 @Disabled("API 컨트롤러가 필요없는 상황이어서 비활성화")
 @DisplayName("API 컨트롤러 - 인증")
-@WebMvcTest(APIAuthController.class)
-class APIAuthControllerTest {
+@WebMvcTest(ApiAuthController.class)
+class ApiAuthControllerTest {
 
     private final MockMvc mvc;
     private final ObjectMapper mapper;
 
-    public APIAuthControllerTest(
+    public ApiAuthControllerTest(
             @Autowired MockMvc mvc,
             @Autowired ObjectMapper mapper
     ) {
@@ -33,7 +34,7 @@ class APIAuthControllerTest {
 
     @DisplayName("[API][POST] 관리자 가입 - 정상 입력하면 회원 정보를 추가하고 안내 메시지 리턴")
     @Test
-    void givenAdminDetails_whenSigningUp_thenCratesAdminRanReturns() throws Exception {
+    void givenAdminDetails_whenSigningUp_thenCreatesAdminAndReturns() throws Exception {
         // Given
         AdminRequest adminRequest = AdminRequest.of(
                 "test@test.com",
@@ -54,29 +55,28 @@ class APIAuthControllerTest {
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
-
     }
 
     @DisplayName("[API][POST] 로그인 - 존재하는 유저 정보로 인증 요청하면 인증 통과")
     @Test
-    void givenUsernameAndPassword_whenLoggingIn_thenPassAuth() throws Exception {
+    void givenUsernameAndPassword_whenLoggingIn_thenCreatesAdminAndReturns() throws Exception {
         // Given
         LoginRequest loginRequest = LoginRequest.of(
-          "test@test.com",
-          "passwd"
+                "test@test.com",
+                "passwd"
         );
 
         // When & Then
         mvc.perform(
-                        post("/api/login")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(loginRequest))
-                )
+                post("/api/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(loginRequest))
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.errorCode").value(ErrorCode.OK.getCode()))
                 .andExpect(jsonPath("$.message").value(ErrorCode.OK.getMessage()));
-
     }
+
 }

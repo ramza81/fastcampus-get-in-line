@@ -122,4 +122,9 @@ public class Place {
         return Objects.hash(placeName, address, phoneNumber, createdAt, modifiedAt);
     }
 
+
+//    public String toString() {
+//        return "Place(id=" + this.getId() + ", placeType=" + this.getPlaceType() + ", placeName=" + this.getPlaceName() + ", address=" + this.getAddress() + ", phoneNumber=" + this.getPhoneNumber() + ", capacity=" + this.getCapacity() + ", memo=" + this.getMemo() + ", createdAt=" + this.getCreatedAt() + ", modifiedAt=" + this.getModifiedAt() + ", events=" + this.getEvents() + ")";
+//    }
+
 }

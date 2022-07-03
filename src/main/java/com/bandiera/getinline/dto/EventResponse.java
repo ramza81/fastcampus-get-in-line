@@ -5,7 +5,7 @@ import com.bandiera.getinline.constant.EventStatus;
 import java.time.LocalDateTime;
 
 public record EventResponse(
-        Long placeId,
+        Long id,
         PlaceDto place,
         String eventName,
         EventStatus eventStatus,
@@ -53,5 +53,9 @@ public record EventResponse(
                 eventDTO.capacity(),
                 eventDTO.memo()
         );
+    }
+
+    public String getPlaceName() {
+        return this.place().placeName();
     }
 }

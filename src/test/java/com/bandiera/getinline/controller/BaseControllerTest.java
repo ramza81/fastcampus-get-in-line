@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("View 컨트롤러 - 기본 페이지")
 @WebMvcTest(BaseController.class)
 class BaseControllerTest {
 
@@ -26,13 +27,13 @@ class BaseControllerTest {
     void givenNothing_whenRequestingRootPage_thenReturnsIndexPage() throws Exception {
         // Given
 
-
         // When & Then
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(content().string(containsString("This is default page.")))
                 .andExpect(view().name("index"))
                 .andDo(print());
     }
+
 }

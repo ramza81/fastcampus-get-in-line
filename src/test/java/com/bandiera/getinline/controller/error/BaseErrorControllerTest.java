@@ -10,25 +10,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("View 컨트롤러 - 에러")
 @WebMvcTest(BaseErrorController.class)
 class BaseErrorControllerTest {
 
     private final MockMvc mvc;
 
-    //    @Autowired
     public BaseErrorControllerTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
     }
 
     @DisplayName("[view][GET] 에러 페이지 - 페이지 없음")
     @Test
-    void givenNothing_whenRequestingRootPage_thenReturns404ErrorPage() throws Exception {
+    void givenWrongURI_whenRequestingPage_thenReturns404ErrorPage() throws Exception {
         // Given
-
 
         // When & Then
         mvc.perform(get("/wrong-uri"))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
+
 }

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@DisplayName("View 컨트롤러 - 어드민")
 @WebMvcTest(AdminController.class)
 class AdminControllerTest {
 
@@ -23,26 +24,24 @@ class AdminControllerTest {
         this.mvc = mvc;
     }
 
-    @DisplayName("[VIEW][GET] 어드민 페이지 - 장소 리스트 뷰")
+    @DisplayName("[view][GET] 어드민 페이지 - 장소 리스트 뷰")
     @Test
     void givenQueryParams_whenRequestingAdminPlacesPage_thenReturnsAdminPlacesPage() throws Exception {
         // Given
 
-
         // When & Then
         mvc.perform(
-                        get("/admin/places")
-                                .queryParam("placeType", PlaceType.SPORTS.name())
-                                .queryParam("placeName", "바디짐")
-                                .queryParam("address", "대구시 수성구 수성로 75길")
-                )
+                get("/admin/places")
+                        .queryParam("placeType", PlaceType.SPORTS.name())
+                        .queryParam("placeName", "랄라배드민턴장")
+                        .queryParam("address", "서울시 강남구 강남대로 1234")
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("admin/places"));
-
     }
 
-    @DisplayName("[VIEW][GET] 어드민 페이지 - 장소 세부 정보 뷰")
+    @DisplayName("[view][GET] 어드민 페이지 - 장소 세부 정보 뷰")
     @Test
     void givenPlaceId_whenRequestingAdminPlaceDetailPage_thenReturnsAdminPlaceDetailPage() throws Exception {
         // Given
@@ -53,32 +52,30 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("admin/place-detail"));
-
     }
 
-    @DisplayName("[VIEW][GET] 어드민 페이지 - 이벤트 리스트 뷰")
+    @DisplayName("[view][GET] 어드민 페이지 - 이벤트 리스트 뷰")
     @Test
     void givenQueryParams_whenRequestingAdminEventsPage_thenReturnsAdminEventsPage() throws Exception {
         // Given
 
-
         // When & Then
         mvc.perform(
-                        get("/admin/events")
-                                .queryParam("placeId", "1")
-                                .queryParam("placeName", "바디짐")
-                                .queryParam("eventName", "오후 운동")
-                                .queryParam("eventStatus", EventStatus.OPENED.name())
-                                .queryParam("eventStartDatetime", LocalDateTime.now().minusDays(1).toString())
-                                .queryParam("eventEndDatetime", LocalDateTime.now().toString())
-                )
+                get("/admin/events")
+                        .contentType(MediaType.TEXT_HTML)
+                        .queryParam("placeId", "1")
+                        .queryParam("placeName", "랄라배드민턴장")
+                        .queryParam("eventName", "오후 운동")
+                        .queryParam("eventStatus", EventStatus.OPENED.name())
+                        .queryParam("eventStartDatetime", LocalDateTime.now().minusDays(1).toString())
+                        .queryParam("eventEndDatetime", LocalDateTime.now().toString())
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("admin/events"));
-
     }
 
-    @DisplayName("[VIEW][GET] 어드민 페이지 - 이벤트 세부 정보 뷰")
+    @DisplayName("[view][GET] 어드민 페이지 - 이벤트 세부 정보 뷰")
     @Test
     void givenEventId_whenRequestingAdminEventDetailPage_thenReturnsAdminEventDetailPage() throws Exception {
         // Given
@@ -89,6 +86,6 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("admin/event-detail"));
-
     }
+
 }

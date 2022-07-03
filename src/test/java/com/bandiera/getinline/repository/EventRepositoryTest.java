@@ -33,6 +33,12 @@ class EventRepositoryTest {
     }
 
 
+    @Test
+    void affd() {
+        Event event = eventRepository.findById(1L).get();
+        System.out.println(event);
+    }
+
     @DisplayName("이벤트 뷰 데이터를 검색 파라미터와 함께 조회하면, 조건에 맞는 데이터를 페이징 처리하여 리턴한다.")
     @Test
     void givenSearchParams_whenFindingEventViewPage_thenReturnsEventViewResponsePage() {

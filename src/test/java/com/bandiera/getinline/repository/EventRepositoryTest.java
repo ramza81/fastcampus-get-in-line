@@ -1,6 +1,7 @@
 package com.bandiera.getinline.repository;
 
 import com.bandiera.getinline.constant.EventStatus;
+import com.bandiera.getinline.domain.Event;
 import com.bandiera.getinline.dto.EventViewResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -23,6 +25,11 @@ class EventRepositoryTest {
 
     public EventRepositoryTest(@Autowired EventRepository eventRepository) {
         this.eventRepository = eventRepository;
+    }
+
+    @Test
+    void dfdff() {
+        List<Event> list = eventRepository.findAll();
     }
 
 
